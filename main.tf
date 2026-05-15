@@ -18,6 +18,9 @@ module "apps" {
 
   for_each       = var.apps
   component_name = each.key
+  port           = each.value["port"]
+
+  lb_type = "private"
 
   env       = var.env
   image_id  = var.image_id
@@ -26,21 +29,17 @@ module "apps" {
 }
 
 
-
 # module "ui" {
-#   source = "./modules/vm"
+#   depends_on = [module.apps]
+#   source     = "./modules/vmss"
 #
 #   for_each       = var.ui
 #   component_name = each.key
 #   port           = each.value["port"]
+#   lb_type        = "public"
 #
-#
-#   rgname   = var.rgname
-#   image_id = var.image_id
-#   env      = var.env
-#   lb_type  = "public"
-#   vm_count = 2
-#
-#   depends_on = [module.apps]
+#   env       = var.env
+#   image_id  = var.image_id
+#   rgname    = var.rgname
+#   subnet_id = var.subnet_id
 # }
-#
