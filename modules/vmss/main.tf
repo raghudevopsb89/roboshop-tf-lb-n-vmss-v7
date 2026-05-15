@@ -11,7 +11,7 @@ resource "azurerm_virtual_machine_scale_set" "main" {
   }
 
   storage_profile_os_disk {
-    name          = "${var.component_name}-${var.env}"
+    name          = "osDiskProfile"
     caching       = "ReadWrite"
     create_option = "FromImage"
     image         = var.image_id
