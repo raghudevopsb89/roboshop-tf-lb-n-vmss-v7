@@ -15,6 +15,7 @@ resource "azurerm_virtual_machine_scale_set" "main" {
     caching       = "ReadWrite"
     create_option = "FromImage"
     image         = var.image_id
+    os_type       = "Linux"
   }
 
   os_profile {
