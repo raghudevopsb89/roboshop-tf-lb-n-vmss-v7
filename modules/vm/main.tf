@@ -1,0 +1,41 @@
+resource "azurerm_network_interface" "main" {
+  count               = var.vm_count
+  name                = "${var.component_name}-${var.env}-nic${count.index}"
+  location            = data.azurerm_resource_group.main.location
+  resource_group_name = data.azurerm_resource_group.main.name
+
+  ip_configuration {
+    name                          = "${var.component_name}-${var.env}-nic${count.index}"
+    subnet_id                     = "/subscriptions/3f2e42e1-ca06-4a99-8c56-be8d8ba306db/resourceGroups/denmark-east-rg/providers/Microsoft.Network/virtualNetworks/workstation-vnet/subnets/default"
+    private_ip_address_allocation = "Dynamic"
+  }
+}
+
+resource "azurerm_linux_virtual_machine" "main" {
+  count                           = var.vm_count
+  name                            = "${var.component_name}-${var.env}-${count.index}"
+  location                        = data.azurerm_resource_group.main.location
+  resource_group_name             = data.azurerm_resource_group.main.name
+  network_interface_ids           = [azurerm_network_interface.main[count.index].id]
+  size                            = "Standard_B1s"
+  admin_password                  = "DevOps@123456"
+  admin_username                  = "devops"
+  source_image_id                 = var.image_id
+  disable_password_authentication = false
+  secure_boot_enabled             = true
+  vtpm_enabled                    = true
+
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
+  }
+}
+
+resource "azurerm_dns_a_record" "main" {
+  name                = "${var.component_name}-${var.env}"
+  zone_name           = "rdevopsb89.online"
+  resource_group_name = data.azurerm_resource_group.main.name
+  ttl                 = 30
+  records             = [azurerm_network_interface.main[0].private_ip_address]
+}
+
