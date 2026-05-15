@@ -29,17 +29,18 @@ module "apps" {
 }
 
 
-# module "ui" {
-#   depends_on = [module.apps]
-#   source     = "./modules/vmss"
-#
-#   for_each       = var.ui
-#   component_name = each.key
-#   port           = each.value["port"]
-#   lb_type        = "public"
-#
-#   env       = var.env
-#   image_id  = var.image_id
-#   rgname    = var.rgname
-#   subnet_id = var.subnet_id
-# }
+module "ui" {
+  depends_on = [module.apps]
+  source     = "./modules/vmss"
+
+  for_each       = var.ui
+  component_name = each.key
+  port           = each.value["port"]
+
+  lb_type = "public"
+
+  env       = var.env
+  image_id  = var.image_id
+  rgname    = var.rgname
+  subnet_id = var.subnet_id
+}
