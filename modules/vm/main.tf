@@ -6,7 +6,7 @@ resource "azurerm_network_interface" "main" {
 
   ip_configuration {
     name                          = "${var.component_name}-${var.env}-nic${count.index}"
-    subnet_id                     = "/subscriptions/3f2e42e1-ca06-4a99-8c56-be8d8ba306db/resourceGroups/denmark-east-rg/providers/Microsoft.Network/virtualNetworks/workstation-vnet/subnets/default"
+    subnet_id                     = var.subnet_id
     private_ip_address_allocation = "Dynamic"
   }
 }

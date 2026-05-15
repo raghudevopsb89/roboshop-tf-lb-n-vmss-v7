@@ -9,4 +9,5 @@ variable "port" {
   default = null
 }
 variable "vm_count" {}
+variable "subnet_id" {}
 
