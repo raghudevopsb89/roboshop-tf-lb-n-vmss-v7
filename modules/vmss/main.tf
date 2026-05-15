@@ -76,6 +76,8 @@ resource "azurerm_linux_virtual_machine_scale_set" "main" {
   secure_boot_enabled = true
   vtpm_enabled        = true
 
+  upgrade_mode = "Automatic"
+
   os_disk {
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
